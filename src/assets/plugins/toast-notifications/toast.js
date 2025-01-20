@@ -85,7 +85,6 @@ const agregarToast = ({ tipo, titulo, descripcion, autoCierre }) => {
 
 	// Función para menajera el cierre del toast
 	const handleAnimacionCierre = (e) => {
-		console.log("e.animationName: " + e.animationName);
 		if (e.animationName === 'cierre') {
 			nuevoToast.removeEventListener('animationend', handleAnimacionCierre);
 			nuevoToast.remove();

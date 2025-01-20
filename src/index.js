@@ -28,18 +28,6 @@ app.get('/index', (req, res) => {
   res.render('index');
 })
 
-// app.get('/:page', (req, res) => {
-//   const { page } = req.params;
-//   console.log(page);
-//   console.log(typeof page);
-//   console.log(res.statusCode);
-//   res.render(page, (err)=>{
-//     if(err){
-//       res.status(404).render('404');
-//     }
-//   });
-// })
-
 app.get('/404', (req, res) => res.render('404'));
 app.get('/500', (req, res) => res.render('500'));
 app.get('/accordion', (req, res) => res.render('accordion'));
@@ -89,7 +77,7 @@ app.use((req, res) => {
 app.listen(PORT, () => {
     console.log(__dirname);
     console.log(path.join(__dirname,'templates'));
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port http://localhost:${PORT}`);
 });
 
 

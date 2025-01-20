@@ -9,7 +9,7 @@
     <meta name="author" content="stacks" />
     <link
       rel="stylesheet"
-      href="../assets/plugins/toast-notifications/toast.css"
+      href="plugins/toast-notifications/toast.css"
     />
     <!-- The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     
@@ -132,7 +132,7 @@
         const email = $("#floatingInput").val();
         const password = $("#floatingPassword").val();
 
-        fetch("/api/auth/login", {
+        fetch("http://127.0.0.1:5000/api/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -142,6 +142,7 @@
             password: password,
           }),
         }).then((res) => {
+          console.log("entré");
           if (res.status === 200) {
             res.json().then((data) => {
 
