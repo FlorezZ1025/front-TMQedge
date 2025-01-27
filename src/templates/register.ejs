@@ -117,7 +117,7 @@
                   >
                 </div>
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-primary m-b-xs">
+                  <button type="submit" id="btn-submit" class="btn btn-primary m-b-xs">
                     Register
                   </button>
                 </div>
@@ -129,8 +129,8 @@
           </div>
         </div>
       </div>
-    <div class="contenedor-toast" id="contenedor-toast"></div>
-    </div>
+    <div id="toast-container"></div>
+  </div>
 
     <!-- Javascripts -->
     <script src="plugins/jquery/jquery-3.4.1.min.js"></script>
@@ -145,17 +145,21 @@
       const form = $("form");
       form.submit(function (e) {
         e.preventDefault();
+        $("#btn-submit").attr("disabled", true);
+
         const fullname = $("#floatingInput").val();
         const email = $("#floatingInput1").val();
         const password = $("#floatingPassword").val();
         const confirmPassword = $("#floatingPassword1").val();
         if (password !== confirmPassword) {
-            agregarToast({
-                tipo: "warning",
-                titulo: "Error",
-                descripcion: "Passwords do not match",
-                autoCierre: true,
+            addToast({
+                type: "alert-warning",
+                title: "Error",
+                description: "Passwords do not match",
               });
+              setTimeout(()=>{
+                $("#btn-submit").attr("disabled", false);
+              }, 1550)
           return;
         }
      
@@ -172,25 +176,26 @@
         }).then((res) => {
           if (res.status === 201) {
             res.json().then((data) => {
-                agregarToast({
-                tipo: "exito",
-                titulo: "Ok",
-                descripcion: data["msg"],
-                autoCierre: true,
+                addToast({
+                type: "alert-success",
+                title: "Ok",
+                description: data["msg"],
               });
               setTimeout(() => {
                 window.location.href = "/";
-              },1500);
+              }, 1200);
               
             });
           } else {
             res.json().then((data) => {
-                agregarToast({
-                tipo: "error",
-                titulo: "Error",
-                descripcion: data["msg"],
-                autoCierre: true,
+                addToast({
+                type: "alert-danger",
+                title: "Error",
+                description: data["msg"],
               });
+              setTimeout(()=>{
+                $("#btn-submit").attr("disabled", false);
+              }, 1000)
               return;
             });
           }

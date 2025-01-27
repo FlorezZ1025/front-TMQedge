@@ -97,7 +97,7 @@
                   >
                 </div>
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-info m-b-xs">
+                  <button type="submit" class="btn btn-info m-b-xs" id="btn-submit">
                     Sign In
                   </button>
                   <button class="btn btn-primary">Facebook</button>
@@ -114,7 +114,7 @@
       </div>
 
     </div>
-    <div class="contenedor-toast" id="contenedor-toast"></div>
+    <div id="toast-container"></div>
 
     <!-- Javascripts -->
     <script src="plugins/jquery/jquery-3.4.1.min.js"></script>
@@ -129,9 +129,13 @@
       const form = $("form");
       form.submit(function (e) {
         e.preventDefault();
+
+        $("#btn-submit").attr("disabled", true);
+
+
         const email = $("#floatingInput").val();
         const password = $("#floatingPassword").val();
-
+        const btnSubmit = $("#btn-submit").disabled = true;
         fetch("http://127.0.0.1:5000/api/auth/login", {
           method: "POST",
           headers: {
@@ -146,11 +150,10 @@
           if (res.status === 200) {
             res.json().then((data) => {
 
-              agregarToast({
-                tipo: "exito",
-                titulo: "Ok",
-                descripcion: data["msg"],
-                autoCierre: true,
+              addToast({
+                type: "alert-success",
+                title: "Ok",
+                description: data["msg"],
               });
               setTimeout(() => {
                 window.location.href = "/index";
@@ -159,12 +162,16 @@
           } 
           else {
             res.json().then((data) => {
-              agregarToast({
-                tipo: "error",
-                titulo: "Error",
-                descripcion: data["msg"],
-                autoCierre: true
+              addToast({
+                type: "alert-danger",
+                title: "Error",
+                description: data["msg"],
               });
+
+              setTimeout(() => {
+                $("#btn-submit").attr("disabled", false);
+              }, 1000);
+
               return;
             });
           }
