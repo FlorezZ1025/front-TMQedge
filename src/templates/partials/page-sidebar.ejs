@@ -8,7 +8,8 @@
         ></i
       ></a>
       <ul class="submenu" id="dashboard-submenu">
-        <div id="item-container"><li>
+        <div id="item-container">
+        <li>
           <a href="/index"> <i class="far fa-circle"></i>Default</a>
         </li>
         <li>
@@ -21,7 +22,7 @@
         <% } %>
       </div>
         <li style="text-align: center;">
-          <button id="addBtn" class="btn btn-outline-primary" style="width: 80%;">+</button>
+          <button id="add-btn" class="btn btn-outline-primary" style="width: 80%;">+</button>
         </li>
       </ul>
     </li>
@@ -209,19 +210,22 @@
 </div>
 
 <script>
-  const addBtn = document.getElementById("addBtn");
+  const addBtn = document.getElementById("add-btn");
   const submenu = document.getElementById("dashboard-submenu");
   const itemContainer = document.getElementById("item-container");
   
   addBtn.addEventListener("click", (e) => {
     e.preventDefault();
+    console.log("clicked");
+        // Crear un elemento <li> con el contenido deseado
+    const newPageBtn = document.createElement("li");
+    newPageBtn.innerHTML = `
+        <a><i class="far fa-circle"></i>oe</a>
+    `;
 
-    newPageBtn = `
-      <li> 
-      <a><i class="far fa-circle"></i>oe<a>
-      </li>`; 
+    // Agregar el nuevo <li> al contenedor
+    itemContainer.appendChild(newPageBtn);
 
-      itemContainer.appendChild(newPageBtn);
   });
 
 </script>
