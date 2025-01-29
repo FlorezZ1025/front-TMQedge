@@ -7,12 +7,21 @@
           class="fas fa-chevron-right dropdown-icon"
         ></i
       ></a>
-      <ul class="submenu">
-        <li>
-          <a href="/index"> <i class="far fa-circle"></i>eCommerce</a>
+      <ul class="submenu" id="dashboard-submenu">
+        <div id="item-container"><li>
+          <a href="/index"> <i class="far fa-circle"></i>Default</a>
         </li>
         <li>
-          <a href="/crypto"><i class="far fa-circle"></i>Crypto</a>
+          <a href="/crypto"><i class="far fa-circle"></i>New page</a>
+        </li>
+        <% for (let i = 0; i < 3; i++) { %>
+          <li>
+            <a href=""> <i class="far fa-circle"></i>Elemento <%= i + 1 %></a>
+          </li>
+        <% } %>
+      </div>
+        <li style="text-align: center;">
+          <button id="addBtn" class="btn btn-outline-primary" style="width: 80%;">+</button>
         </li>
       </ul>
     </li>
@@ -200,10 +209,28 @@
 </div>
 
 <script>
+  const addBtn = document.getElementById("addBtn");
+  const submenu = document.getElementById("dashboard-submenu");
+  const itemContainer = document.getElementById("item-container");
+  
+  addBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    newPageBtn = `
+      <li> 
+      <a><i class="far fa-circle"></i>oe<a>
+      </li>`; 
+
+      itemContainer.appendChild(newPageBtn);
+  });
+
+</script>
+
+<script>
   const listItems = document.querySelectorAll(
     ".list-unstyled.accordion-menu > li > a"
   );
-  const sublinks = document.querySelectorAll(".submenu > li > a");
+  const sublinks = document.querySelectorAll(".submenu > div > li > a");
 
 
   function setActiveItem(index) {
