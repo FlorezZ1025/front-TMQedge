@@ -1,6 +1,8 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import pkg from 'cookie-parser';
+import {protectedRoute} from './middlewares/protectedRoute.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,6 +16,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'templates'));
 
 app.use(express.static(path.join(__dirname, "assets")));
+app.use(pkg());
 
 
 app.get('/', (req, res) => {
@@ -27,6 +30,12 @@ app.get('/register', (req, res) => {
 app.get('/index', (req, res) => {
   res.render('index');
 })
+
+app.get("/check-cookie", (req, res) => {
+  console.log(req.cookies); // Ver qué cookies está recibiendo el servidor
+  res.json(req.cookies);
+});
+
 
 app.get('/404', (req, res) => res.render('404'));
 app.get('/500', (req, res) => res.render('500'));
@@ -75,8 +84,6 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(__dirname);
-    console.log(path.join(__dirname,'templates'));
     console.log(`Server is running on port http://localhost:${PORT}`);
 });
 

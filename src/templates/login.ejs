@@ -138,6 +138,7 @@
         const btnSubmit = $("#btn-submit").disabled = true;
         fetch("http://127.0.0.1:5000/api/auth/login", {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -146,17 +147,20 @@
             password: password,
           }),
         }).then((res) => {
-          console.log("entré");
           if (res.status === 200) {
             res.json().then((data) => {
 
               addToast({
                 type: "alert-success",
                 title: "Ok",
-                description: data["msg"],
+                description: data.msg,
               });
+
+              localStorage.setItem("user", data.user);
+              console.log(data.user);
               setTimeout(() => {
-                window.location.href = "/index";
+                console.log('ola');
+                // window.location.href = "/index";
               }, 1500);
             });
           } 
@@ -165,7 +169,7 @@
               addToast({
                 type: "alert-danger",
                 title: "Error",
-                description: data["msg"],
+                description: data.msg,
               });
 
               setTimeout(() => {

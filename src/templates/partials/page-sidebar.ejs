@@ -216,13 +216,11 @@
   
   addBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    console.log("clicked");
-        // Crear un elemento <li> con el contenido deseado
+    // Crear un elemento <li> con el contenido deseado
     const newPageBtn = document.createElement("li");
     newPageBtn.innerHTML = `
-        <a><i class="far fa-circle"></i>oe</a>
+        <a href="#"><i class="far fa-circle"></i>oe</a>
     `;
-
     // Agregar el nuevo <li> al contenedor
     itemContainer.appendChild(newPageBtn);
 

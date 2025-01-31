@@ -44,7 +44,6 @@ const toast = `
   const handleAnimacionCierre = (e) => {
     if (e.animationName === "close") {
       newToast.removeEventListener("animationend", handleAnimacionCierre);
-	console.log("cerrando")
 	  newToast.remove();
     }
   };

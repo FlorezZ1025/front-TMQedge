@@ -179,7 +179,7 @@
                 addToast({
                 type: "alert-success",
                 title: "Ok",
-                description: data["msg"],
+                description: data.msg,
               });
               setTimeout(() => {
                 window.location.href = "/";
@@ -191,7 +191,7 @@
                 addToast({
                 type: "alert-danger",
                 title: "Error",
-                description: data["msg"],
+                description: data.msg,
               });
               setTimeout(()=>{
                 $("#btn-submit").attr("disabled", false);
