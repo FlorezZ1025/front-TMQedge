@@ -477,7 +477,13 @@
 
         console.log("haciendo llamado al backend");
 
-        const response = await fetch('http://127.0.0.1:5000/api/amplitud/datos')
+        const response = await fetch('http://127.0.0.1:5000/api/amplitud/datos',{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        })
         const data = await response.json();
 
         localStorage.setItem('rasiData', JSON.stringify(data));
@@ -498,7 +504,7 @@
         spinner2.style.display = "block";
         getRasiData().then(data => {
           
-          let dates = data["dates"].map(parseCustomDate)
+         let dates = data["dates"].map(parseCustomDate)
          let values = data["values"]
          const options = {
            chart: {type: "line", height: 350},

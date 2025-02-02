@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 
-const secretKey = process.env.JWT_SECRET_KEY
+const secretKey = process.env.JWT_SECRET_KEY || 'miclavesecreta';
 
 const protectedRoute = async (req, res, next) => {
-  const isAuthenticated = await checkAuth();
+  const isAuthenticated = await checkAuth(req.cookies.access_token);
  
   if(!isAuthenticated){
     return res.redirect('/');
@@ -11,18 +11,12 @@ const protectedRoute = async (req, res, next) => {
   next();
   };
 
-const checkAuth = async () => {
+const checkAuth = async (token) => {
   try{
-      const response = await fetch('http://127.0.0.1:5000/api/auth/check-auth', {
-        method: 'GET',
-        credentials: 'include',
-      });
-      const data = await response.json();
-      console.log(data.isAuthenticated);
-      return data.isAuthenticated;
-      
+    return jwt.verify(token, secretKey);
   } catch (error) {
-      return false;
+    console.log(error);
+    return false;
   }
 
 }
