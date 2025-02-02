@@ -2,7 +2,7 @@
 /* Toast */
 #toast-container {
 	position: fixed;
-	z-index: 100;
+	z-index: 11001;
 	right: 40px;
 	bottom: 40px;
 	width: 100%;

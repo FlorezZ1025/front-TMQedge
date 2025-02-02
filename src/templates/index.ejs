@@ -29,9 +29,39 @@
 
     <script src="plugins/toast-notifications/toast.js" defer></script>
   </head>
-  <body class="">
+  <body class="pace-done no-loader" style>
     <div class="page-container">
       <%- include('partials/page-sidebar') %>
+      <div class="modal fade" id="createDashboardModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createDashboardModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="createDashboardModalTitle">New dashboard</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+            </div>
+            <form>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingDashboardName" placeholder="Dashboard name" required>
+                    <label for="floatingDashboardName">Dashboard Name</label>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingDescription" placeholder="Description" required>
+                    <label for="floatingDescription">Description</label>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
       <div class="page-content">
         <div class="page-header">
           <nav class="navbar navbar-expand-lg d-flex justify-content-between">
@@ -216,7 +246,7 @@
         <div class="main-wrapper">
           <div class="row">
               <div class="card main-chart-card">
-                <div class="card-body b-l text-center">
+                <div id="awo" class="card-body b-l text-center">
                   RASI
                   <div class="" id="loading-spinner" style="display:none; margin-top: 5%;">
                     <div class="spinner-border" role="status"></div>
@@ -242,6 +272,7 @@
               <div class="card card-bg">
                 <div class="card-body">
                   <h5 class="card-title">Sales</h5>
+                  <button id="oeee" class="btn btn-primary">0</button>
                   <div id="sparkline1"></div>
                 </div>
               </div>
@@ -447,12 +478,64 @@
         </div>
       </div>
     </div>
+   
     <div id="toast-container"></div>
-
     <script src="plugins/apexcharts/apexcharts.min.js"></script>
 
+    <!-- Script para el crear el dashboard -->
     <script>
+    function getCookie(name) {
+      const value = `${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      }
 
+      // Obtener el token CSRF de la cookie
+      const csrfToken = getCookie('csrf_access_token');
+      
+      const form = $("form");
+      form.submit((e) => {
+        e.preventDefault();
+        const dashboardName = $("#floatingDashboardName").val();
+        const description = $("#floatingDescription").val();
+
+        fetch('http://127.0.0.1:5000/api/dashboard/create',{
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            "Content-Type": "application/json",
+            'X-CSRF-TOKEN': csrfToken
+          },
+          body: JSON.stringify({
+            dashboardName: dashboardName,
+            description: description
+          })
+        }).then(response => {
+          if(response.status === 201){
+            response.json().then(data => {
+              addToast({
+                type: "alert-success",
+                title: "Ok",
+                description: data.msg,
+              });
+            });
+          }else{
+            response.json().then(data => {
+              addToast({
+                type: "alert-danger",
+                title: "Error",
+                description: data.msg,
+              });
+            });
+          }
+        });
+        const modal = bootstrap.Modal.getInstance(document.getElementById('createDashboardModal'));
+        modal.hide(); 
+      })
+    </script>
+
+    <!-- Script para las gráficas -->
+    <script>
       function parseCustomDate(dateString){
         const day = dateString.substring(0,2);
         const month = dateString.substring(2,4);
