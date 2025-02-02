@@ -482,6 +482,9 @@
     <div id="toast-container"></div>
     <script src="plugins/apexcharts/apexcharts.min.js"></script>
 
+
+ 
+
     <!-- Script para el crear el dashboard -->
     <script>
     function getCookie(name) {
@@ -489,10 +492,9 @@
       const parts = value.split(`; ${name}=`);
       if (parts.length === 2) return parts.pop().split(';').shift();
       }
-
       // Obtener el token CSRF de la cookie
       const csrfToken = getCookie('csrf_access_token');
-      
+
       const form = $("form");
       form.submit((e) => {
         e.preventDefault();
@@ -518,6 +520,8 @@
                 title: "Ok",
                 description: data.msg,
               });
+              const modal = bootstrap.Modal.getInstance(document.getElementById('createDashboardModal'));
+              modal.hide(); 
             });
           }else{
             response.json().then(data => {
@@ -529,8 +533,6 @@
             });
           }
         });
-        const modal = bootstrap.Modal.getInstance(document.getElementById('createDashboardModal'));
-        modal.hide(); 
       })
     </script>
 
@@ -612,15 +614,12 @@
         
       
       }
-      // .then(response => response.json())
-      // .then
-      
 
       document.addEventListener("DOMContentLoaded", showRasiData());
     </script>
-    <script>
-      
 
+    <!-- Script para el logout -->
+    <script>
       function logout() {
         fetch("http://127.0.0.1:5000/api/auth/logout", {
           method: "POST",
@@ -652,15 +651,6 @@
         });
       }
     </script>
-    <!-- Javascripts -->
-    <!-- <script src="plugins/jquery/jquery-3.4.1.min.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script> -->
-    <!-- <script src="plugins/perfectscroll/perfect-scrollbar.min.js"></script> -->
-    <!-- <script src="plugins/pace/pace.min.js"></script> -->
-    <!-- <script src="plugins/sparkline/jquery.sparkline.min.js"></script> -->
-    <!-- <script src="js/main.min.js"></script> -->
-    <!-- <script src="../../assets/js/pages/dashboard.js"></script> -->
+
   </body>
 </html>

@@ -157,9 +157,7 @@
               });
 
               localStorage.setItem("user", data.user);
-              console.log(data.user);
               setTimeout(() => {
-                console.log('ola');
                 window.location.href = "/index";
               }, 1500);
             });
@@ -181,20 +179,7 @@
             });
           }
         });
-        fetch('http://127.0.0.1:5000/api/auth/check-auth', {
-          method: 'GET',
-          credentials: 'include',
-        }).then((res) => {
-          if (res.status === 200) {
-            res.json().then((data) => {
-              console.log(data);
-            });
-          } else {
-            res.json().then((data) => {
-              console.log(data);
-            });
-          }
-        })
+  
 
       });
     </script>

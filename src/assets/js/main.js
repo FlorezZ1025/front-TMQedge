@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    
     "use strict";
     const submenu_animation_speed = 200;
 

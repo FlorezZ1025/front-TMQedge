@@ -12,14 +12,7 @@
           <li>
             <a href="/index"> <i class="far fa-circle"></i>Default</a>
           </li>
-          <li>
-            <a href="/crypto"><i class="far fa-circle"></i>New page</a>
-          </li>
-          <% for (let i = 0; i < 2; i++) { %>
-          <li>
-            <a href=""> <i class="far fa-circle"></i>Elemento <%= i + 1 %></a>
-          </li>
-          <% } %>
+    
         </div>
         <li style="text-align: center">
           <button
@@ -233,6 +226,59 @@
     itemContainer.appendChild(newPageBtn);
   });
 </script> -->
+   <!-- Script para el cargar los nombres de los dashboard -->
+   <script >
+    function getCookie(name) {
+      const value = `${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      }
+      // Obtener el token CSRF de la cookie
+      const csrfToken_ = getCookie('csrf_access_token');
+
+    async function loadDashboards(){
+    const response = await fetch('http://127.0.0.1:5000/api/dashboard/get_names', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken_
+      },
+      credentials: 'include',
+    })
+    response.json().then((data) => {
+      const dashboards = data.dashboards;
+      if(!dashboards){
+        return;
+      }
+      displayDashboards(data.dashboards);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      return;
+    });
+  
+    
+  }
+    function displayDashboards(dashboards) {
+      const dashboardList = document.getElementById('item-container');
+
+     // Limpia la lista antes de agregar nuevos elementos
+     while (dashboardList.children.length > 1) {
+        dashboardList.removeChild(dashboardList.lastChild);
+     }
+
+
+     // Recorre los dashboards y crea un <li> para cada uno
+      dashboards.forEach(element => {
+       const listItem = document.createElement('li');
+       listItem.innerHTML = `<a href="#" style="overflow-wrap: break-word;"><i class="far fa-circle"></i>${element.name}</a>`; // Muestra el nombre del dashboard
+       dashboardList.appendChild(listItem);
+      
+     });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadDashboards());
+    </script>
 
 <script>
   const listItems = document.querySelectorAll(
