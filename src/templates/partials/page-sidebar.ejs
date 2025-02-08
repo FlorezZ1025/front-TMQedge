@@ -1,5 +1,5 @@
 <div class="page-sidebar">
-  <a class="logo" href="/index">Neo</a>
+  <a class="logo" href="/index">Turing Flow</a>
   <ul class="list-unstyled accordion-menu">
     <li>
       <a href
@@ -12,7 +12,6 @@
           <li>
             <a href="/index"> <i class="far fa-circle"></i>Default</a>
           </li>
-    
         </div>
         <li style="text-align: center">
           <button
@@ -209,78 +208,61 @@
     ><i data-feather="arrow-right"></i
   ></a>
 </div>
-<!-- 
-<script>
-  const addBtn = document.getElementById("add-btn");
-  const submenu = document.getElementById("dashboard-submenu");
-  const itemContainer = document.getElementById("item-container");
 
-  addBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    // Crear un elemento <li> con el contenido deseado
-    const newPageBtn = document.createElement("li");
-    newPageBtn.innerHTML = `
-        <a href="#"><i class="far fa-circle"></i>oe</a>
-    `;
-    // Agregar el nuevo <li> al contenedor
-    itemContainer.appendChild(newPageBtn);
-  });
-</script> -->
-   <!-- Script para el cargar los nombres de los dashboard -->
-   <script >
-    function getCookie(name) {
-      const value = `${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
+<!-- Script para el cargar los nombres de los dashboard -->
+<script type="module">
+  import { csrfToken } from "/js/scripts/csrfToken.js";
+
+  async function loadDashboards() {
+    const response = await fetch(
+      "http://127.0.0.1:5000/api/dashboard/get_names",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        credentials: "include",
       }
-      // Obtener el token CSRF de la cookie
-      const csrfToken_ = getCookie('csrf_access_token');
-
-    async function loadDashboards(){
-    const response = await fetch('http://127.0.0.1:5000/api/dashboard/get_names', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken_
-      },
-      credentials: 'include',
-    })
-    response.json().then((data) => {
-      const dashboards = data.dashboards;
-      if(!dashboards){
+    );
+    response
+      .json()
+      .then((data) => {
+        const dashboards = data.dashboards;
+        if (!dashboards) {
+          return;
+        }
+        displayDashboards(data.dashboards);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
         return;
-      }
-      displayDashboards(data.dashboards);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      return;
-    });
-  
-    
+      });
   }
-    function displayDashboards(dashboards) {
-      const dashboardList = document.getElementById('item-container');
+  function displayDashboards(dashboards) {
+    const dashboardList = document.getElementById("item-container");
 
-     // Limpia la lista antes de agregar nuevos elementos
-     while (dashboardList.children.length > 1) {
-        dashboardList.removeChild(dashboardList.lastChild);
-     }
-
-
-     // Recorre los dashboards y crea un <li> para cada uno
-      dashboards.forEach(element => {
-       const listItem = document.createElement('li');
-       listItem.innerHTML = `<a href="#" style="overflow-wrap: break-word;"><i class="far fa-circle"></i>${element.name}</a>`; // Muestra el nombre del dashboard
-       dashboardList.appendChild(listItem);
-      
-     });
+    // Limpia la lista antes de agregar nuevos elementos
+    while (dashboardList.children.length > 1) {
+      dashboardList.removeChild(dashboardList.lastChild);
     }
 
-    document.addEventListener("DOMContentLoaded", loadDashboards());
-    </script>
+    // Recorre los dashboards y crea un <li> para cada uno
+    dashboards.forEach((element) => {
+      const listItem = document.createElement("li");
+      listItem.classList.add("dashboard-item");
+      listItem.innerHTML = `<a href class="user-dashboard-link" id="${element.id}" style="overflow-wrap: break-word;"><i class="far fa-circle"></i>${element.name}</a>`; // Muestra el nombre del dashboard
+      dashboardList.appendChild(listItem);
+    });
+  }
 
-<script>
+  document.addEventListener("DOMContentLoaded", loadDashboards());
+  ////////////////////////////////
+
+  // let currentDashboardId = null;
+</script>
+
+<!-- <script>
   const listItems = document.querySelectorAll(
     ".list-unstyled.accordion-menu > li > a"
   );
@@ -336,4 +318,43 @@
   });
 
   document.addEventListener("DOMContentLoaded", restoreActiveItem);
+</script> -->
+
+<!-- Script para cargar el dashboard seleccionado --->
+<script type="module">
+  const dashboardLinks = document.querySelectorAll(".user-dashboard-link");
+  console.log(dashboardLinks);
+  dashboardLinks.forEach((dashboardLink) => {
+    dashboardLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      console.log("oee");
+      const dashboardId = e.target.getAttribute("id");
+      currentDashboardId = dashboardId;
+      fetch(
+        `http://127.0.0.1:5000/api/dashboard/get_dashboard/${dashboardId}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": csrfToken,
+          },
+        }
+      ).then((response) => {
+        if (response.status === 200) {
+          response.json().then((data) => {
+            console.log(data.name);
+          });
+        } else {
+          response.json().then((data) => {
+            addToast({
+              type: "alert-danger",
+              title: "Error",
+              description: data.msg,
+            });
+          });
+        }
+      });
+    });
+  });
 </script>

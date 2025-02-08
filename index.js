@@ -30,7 +30,7 @@ app.get('/register', (req, res) => {
 })
 
 app.get('/index', protectedRoute, (req, res) => {
-  res.render('index');
+  res.render('index' , {user: req.user});
 })
 
 

@@ -8,6 +8,7 @@ const protectedRoute = async (req, res, next) => {
   if(!isAuthenticated){
     return res.redirect('/');
   }
+  req.user = isAuthenticated.sub;
   next();
   };
 
